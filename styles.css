@@ -111,6 +111,21 @@ nav .show-wish-list {
 /* =======  End of book List  ======= */
 
 /**================================================== *
+ * ==========  book info  ========== *
+ * ================================================== */
+.filter-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-inline: 16px;
+}
+.filter-info p {
+  margin: 0;
+  color: #232121;
+}
+/* =======  End of book info  ======= */
+
+/**================================================== *
 * ==========  wish List  ========== *
 * ================================================== */
 .wishlist-btn {
@@ -182,6 +197,10 @@ nav .show-wish-list {
   color: rgb(128, 128, 128) !important;
   opacity: 0.2;
   cursor: not-allowed !important;
+}
+
+.not-found {
+  color: rgb(164, 28, 28);
 }
 /* =======  End of global class  ======= */
 

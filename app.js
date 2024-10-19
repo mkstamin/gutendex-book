@@ -40,6 +40,7 @@ function displayBooks(page, books) {
   const bookList = document.getElementById("book-list");
   const pageInfo = document.getElementById("page-info");
   const preLoader = document.getElementById("pre-loader");
+  const totalBooks = document.getElementById("total-books");
 
   if (!loading) {
     preLoader.classList.add("hidden");
@@ -47,26 +48,35 @@ function displayBooks(page, books) {
 
   bookList.innerHTML = ""; // Clear previous list
   pageInfo.innerHTML = page;
+  totalBooks.innerHTML = books.length;
 
-  books.forEach((book) => {
-    bookMap.set(book.id, book);
-    const bookItem = document.createElement("div");
-    bookItem.classList.add("book-item");
+  if (books.length <= 0) {
+    const h2 = document.createElement("h2");
+    h2.classList.add("not-found");
 
-    bookItem.innerHTML = `
-              <img src="${
-                book.formats["image/jpeg"] || "default.jpg"
-              }" alt="Book Cover">
-              <h3 class="book-title">${book.title}</h3>
-              <p class="book-author">by ${
-                book.authors[0] ? book.authors[0].name : "Unknown"
-              }</p>
-              <button class="wishlist-btn ${
-                checkWishList(book.id) && "wish-listed"
-              }" data-id="${book.id}">♡ Wishlist</button>
-          `;
-    bookList.appendChild(bookItem);
-  });
+    h2.innerHTML = "No books found!";
+    bookList.appendChild(h2);
+  } else {
+    books.forEach((book) => {
+      bookMap.set(book.id, book);
+      const bookItem = document.createElement("div");
+      bookItem.classList.add("book-item");
+
+      bookItem.innerHTML = `
+                <img src="${
+                  book.formats["image/jpeg"] || "default.jpg"
+                }" alt="Book Cover">
+                <h3 class="book-title">${book.title}</h3>
+                <p class="book-author">by ${
+                  book.authors[0] ? book.authors[0].name : "Unknown"
+                }</p>
+                <button class="wishlist-btn ${
+                  checkWishList(book.id) && "wish-listed"
+                }" data-id="${book.id}">♡ Wishlist</button>
+            `;
+      bookList.appendChild(bookItem);
+    });
+  }
 }
 
 // add genres section data
@@ -117,6 +127,28 @@ function toggleWishlist(book) {
   localStorage.setItem("wishlist", JSON.stringify(wishlist));
 }
 
+// filter by genre
+function filterByGenre(genre) {
+  if (genre === "all") return displayBooks(currentPage, bookData);
+
+  // set genre to localStorage
+  localStorage.setItem("genre", genre);
+
+  const filterGon = bookData.map((b) => {
+    return {
+      ...b,
+      genre: b.bookshelves
+        .filter((g) => g.startsWith("Browsing:"))
+        .map((g) => g.replace("Browsing:", " ").trim()),
+    };
+  });
+
+  const filteredBooks = filterGon.filter((book) => book.genre.includes(genre));
+
+  //display book
+  displayBooks(currentPage, filteredBooks);
+}
+
 // add the book as a wishlist
 document.addEventListener("click", function (e) {
   if (e.target.classList.contains("wishlist-btn")) {
@@ -150,6 +182,10 @@ document
 // implement light search
 document.getElementById("search-bar").addEventListener("input", function (e) {
   const searchQuery = e.target.value.toLowerCase();
+
+  // set searchQuery to localStorage
+  localStorage.setItem("searchQuery", searchQuery);
+
   const filterBooks = bookData.filter((book) =>
     book.title.toLowerCase().includes(searchQuery)
   );
@@ -164,23 +200,8 @@ document
   .addEventListener("change", function (e) {
     const genre = e.target.value;
 
-    if (genre === "all") return displayBooks(currentPage, bookData);
-
-    const filterGon = bookData.map((b) => {
-      return {
-        ...b,
-        genre: b.bookshelves
-          .filter((g) => g.startsWith("Browsing:"))
-          .map((g) => g.replace("Browsing:", " ").trim()),
-      };
-    });
-
-    const filteredBooks = filterGon.filter((book) =>
-      book.genre.includes(genre)
-    );
-
-    //display book
-    displayBooks(currentPage, filteredBooks);
+    // filter By Genre
+    filterByGenre(genre);
   });
 
 // pagination next page
@@ -204,5 +225,29 @@ document.getElementById("prev-page").addEventListener("click", function () {
 });
 
 window.addEventListener("load", function () {
+  // const lastFilter = document.getElementById("last-filter");
+  // const lastSearch = document.getElementById("last-search");
+
+  // // get data from local storage
+  // const savedSearch = localStorage.getItem("searchQuery");
+  // const savedGenre = localStorage.getItem("genre");
+
+  // first time call
   handleDisplayBooks(currentPage);
+
+  // // Display saved search query if it exists
+  // if (savedSearch) {
+  //   lastSearch.innerHTML = savedSearch;
+  //   lastSearch.parentElement.classList.remove("hidden");
+  // } else {
+  //   lastSearch.parentElement.classList.add("hidden");
+  // }
+
+  // // Display saved genre filter if it exists
+  // if (savedGenre) {
+  //   lastFilter.innerHTML = savedGenre;
+  //   lastFilter.parentElement.classList.remove("hidden");
+  // } else {
+  //   lastFilter.parentElement.classList.add("hidden");
+  // }
 });
