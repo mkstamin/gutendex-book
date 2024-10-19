@@ -126,6 +126,24 @@ document.addEventListener("click", function (e) {
   }
 });
 
+// show all wish lists books
+document
+  .querySelector('a[href="#wishlist"]')
+  .addEventListener("click", function displayWishlist() {
+    const genreFilter = document.getElementById("genre-filter");
+    const searchBar = document.getElementById("search-bar");
+    const pagination = document.getElementById("pagination");
+
+    genreFilter.classList.add("hidden");
+    searchBar.classList.add("hidden");
+    pagination.classList.add("hidden");
+
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+    //displayBooks
+    displayBooks(currentPage, wishlist);
+  });
+
 window.addEventListener("load", function () {
   handleDisplayBooks(currentPage);
 });
