@@ -155,6 +155,29 @@ document.getElementById("search-bar").addEventListener("input", function (e) {
   displayBooks(currentPage, filterBooks);
 });
 
+// filter by genre
+document
+  .getElementById("genre-filter")
+  .addEventListener("change", function (e) {
+    const genre = e.target.value;
+
+    const filterGon = bookData.map((b) => {
+      return {
+        ...b,
+        genre: b.bookshelves
+          .filter((g) => g.startsWith("Browsing:"))
+          .map((g) => g.replace("Browsing:", " ").trim()),
+      };
+    });
+
+    const filteredBooks = filterGon.filter((book) =>
+      book.genre.includes(genre)
+    );
+
+    //display book
+    displayBooks(currentPage, filteredBooks);
+  });
+
 window.addEventListener("load", function () {
   handleDisplayBooks(currentPage);
 });
