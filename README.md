@@ -25,13 +25,13 @@ This is a simple web application that displays a list of books from the [Gutende
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/gutendex-book-library.git
+   git clone https://github.com/mkstamin/gutendex-book.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd gutendex-book-library
+   cd gutendex-book
    ```
 
 3. Open `index.html` in your browser to view the application.
