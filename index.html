@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Store</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- pre-loader section -->
+    <div class="pre-loader" id="pre-loader">
+        <p>Loading....</p>
+    </div>
+
+    <!-- Nav bar section -->
+    <nav>
+        <h1><a href="/">Book Store</a></h1>
+        <a href="#wishlist" class="show-wish-list">Wishlist</a>
+    </nav>
+
+    <!-- Genres select section -->
+    <div class="search-container">
+        <input type="text" id="search-bar" class="search-bar" placeholder="Search for books...">
+        <select id="genre-filter" class="genre-filter ">
+            <option value="">All Genres</option>
+        </select>
+    </div>
+
+    <!-- book list section -->
+    <div id="book-list" class="book-list"></div>
+
+    <!-- pagination section -->
+    <div id="pagination" class="pagination">
+        <button id="prev-page">Previous</button>
+        <p>
+            page number:
+            <span id="page-info"></span>
+        </p>
+        <button id="next-page">Next</button>
+    </div>
+
+    <!-- script section -->
+    <script src="app.js"></script>
+</body>
+
+</html>
