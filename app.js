@@ -98,6 +98,34 @@ function checkWishList(id) {
   return wishlist.some((book) => book.id === id);
 }
 
+// toggle the wishlist
+function toggleWishlist(book) {
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+  const findWishlist = wishlist.find((itm) => itm.id === book.id);
+
+  if (findWishlist) {
+    const index = wishlist.findIndex((w) => w.id === book.id);
+    wishlist.splice(index, 1);
+  } else {
+    wishlist.push(book);
+  }
+
+  localStorage.setItem("wishlist", JSON.stringify(wishlist));
+}
+
+// add the book as a wishlist
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("wishlist-btn")) {
+    const bookId = e.target.dataset.id;
+    const book = bookMap.get(parseInt(bookId));
+
+    toggleWishlist(book);
+
+    e.target.classList.toggle("wish-listed");
+  }
+});
+
 window.addEventListener("load", function () {
   handleDisplayBooks(currentPage);
 });
