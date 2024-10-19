@@ -181,6 +181,26 @@ document
     displayBooks(currentPage, filteredBooks);
   });
 
+// pagination next page
+document.getElementById("next-page").addEventListener("click", function () {
+  const preLoader = document.getElementById("pre-loader");
+  preLoader.classList.remove("hidden");
+  currentPage++;
+  handleDisplayBooks(currentPage);
+});
+
+// pagination previous page
+document.getElementById("prev-page").addEventListener("click", function () {
+  const preLoader = document.getElementById("pre-loader");
+
+  if (currentPage > 1) {
+    loading = true;
+    preLoader.classList.remove("hidden");
+    currentPage--;
+    handleDisplayBooks(currentPage);
+  }
+});
+
 window.addEventListener("load", function () {
   handleDisplayBooks(currentPage);
 });
