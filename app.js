@@ -27,6 +27,9 @@ async function fetchBooks(pageNumber) {
 async function handleDisplayBooks(page) {
   const books = await fetchBooks(page);
 
+  /// selection
+  addSelection(books);
+
   //displayBooks
   displayBooks(page, books);
 }
