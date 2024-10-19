@@ -1,5 +1,6 @@
 // set variables
 let bookData;
+let currentPage = 1;
 let loading = true;
 
 // API call and return data
@@ -20,6 +21,81 @@ async function fetchBooks(pageNumber) {
 
     return [];
   }
+}
+
+// Display books on the page
+async function handleDisplayBooks(page) {
+  const books = await fetchBooks(page);
+
+  //displayBooks
+  displayBooks(page, books);
+}
+
+let bookMap = new Map();
+// show the books on the page
+function displayBooks(page, books) {
+  const bookList = document.getElementById("book-list");
+  const pageInfo = document.getElementById("page-info");
+  const preLoader = document.getElementById("pre-loader");
+
+  if (!loading) {
+    preLoader.classList.add("hidden");
+  }
+
+  bookList.innerHTML = ""; // Clear previous list
+  pageInfo.innerHTML = page;
+
+  books.forEach((book) => {
+    bookMap.set(book.id, book);
+    const bookItem = document.createElement("div");
+    bookItem.classList.add("book-item");
+
+    bookItem.innerHTML = `
+              <img src="${
+                book.formats["image/jpeg"] || "default.jpg"
+              }" alt="Book Cover">
+              <h3 class="book-title">${book.title}</h3>
+              <p class="book-author">by ${
+                book.authors[0] ? book.authors[0].name : "Unknown"
+              }</p>
+              <button class="wishlist-btn ${
+                checkWishList(book.id) && "wish-listed"
+              }" data-id="${book.id}">♡ Wishlist</button>
+          `;
+    bookList.appendChild(bookItem);
+  });
+}
+
+// add genres section data
+function addSelection(books) {
+  // Get the select element by its ID
+  const genreSelect = document.getElementById("genre-filter");
+
+  const filterGon = books.map((b) => {
+    return {
+      gon: b.bookshelves
+        .filter((g) => g.startsWith("Browsing:"))
+        .map((g) => g.replace("Browsing:", " ").trim()),
+    };
+  });
+
+  const uniqueGon = [...new Set(filterGon.flatMap((item) => item.gon))];
+
+  // Loop through the unique genres and add them as options
+  uniqueGon.forEach((genre) => {
+    const option = document.createElement("option");
+    option.value = genre;
+    option.textContent = genre;
+
+    genreSelect.appendChild(option);
+  });
+}
+
+// check the book is marked as WishList or  not
+function checkWishList(id) {
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+  return wishlist.some((book) => book.id === id);
 }
 
 window.addEventListener("load", function () {
