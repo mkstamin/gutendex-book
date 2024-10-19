@@ -144,6 +144,17 @@ document
     displayBooks(currentPage, wishlist);
   });
 
+// implement light search
+document.getElementById("search-bar").addEventListener("input", function (e) {
+  const searchQuery = e.target.value.toLowerCase();
+  const filterBooks = bookData.filter((book) =>
+    book.title.toLowerCase().includes(searchQuery)
+  );
+
+  //display book
+  displayBooks(currentPage, filterBooks);
+});
+
 window.addEventListener("load", function () {
   handleDisplayBooks(currentPage);
 });
