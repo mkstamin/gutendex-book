@@ -164,6 +164,8 @@ document
   .addEventListener("change", function (e) {
     const genre = e.target.value;
 
+    if (genre === "all") return displayBooks(currentPage, bookData);
+
     const filterGon = bookData.map((b) => {
       return {
         ...b,
